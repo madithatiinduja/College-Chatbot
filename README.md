@@ -26,41 +26,27 @@ A modern, intelligent chatbot designed to provide 24/7 assistance to college stu
 - **Quick Actions**: Pre-built buttons for common questions
 - **Chat History**: Persistent storage of conversations
 
-## 🚀 Quick Start
+## 🚀 Deployment
 
-### Prerequisites
-- Python 3.7 or higher
-- Modern web browser
-- Internet connection (for external resources)
+### 🌐 Live Link
+**[View the Live Demo here!](https://college-chatbot.onrender.com)** *(Replace this with your actual Render URL)*
 
-### Installation
+### 📁 Repository
+**[GitHub Repository](https://github.com/madithatiinduja/College-Chatbot)**
 
-1. **Clone or download the project**
-   ```bash
-   git clone <repository-url>
-   cd Cllg-Chatbot
-   ```
+### ☁️ Hosting on Render (Full App)
+This project is fully configured for [Render](https://render.com/).
 
-2. **Install Python dependencies**
-   ```bash
-   pip install -r requirements.txt
-   ```
+1. **Connect GitHub**: Connect your repository to a new Render Web Service.
+2. **Settings**:
+   - **Runtime**: `Python`
+   - **Build Command**: `pip install -r requirements.txt`
+   - **Start Command**: `gunicorn app:app`
+3. **Environment Variables**:
+   - `ADMIN_TOKEN`: Your secret admin code (default: `changeme`).
+   - `FLASK_SECRET_KEY`: A secure random string.
 
-3. **Run the Flask server**
-   ```bash
-   python app.py
-   ```
-
-4. **Open your browser**
-   Navigate to `http://localhost:5000`
-
-### Alternative: Direct HTML Usage
-If you prefer not to use the Python backend:
-1. Simply open `index.html` in your web browser
-2. The chatbot will work with local AI logic
-3. No server setup required
-
-## 🏗️ Architecture
+## �️ Installation & Local Setup
 
 ### Frontend (HTML/CSS/JavaScript)
 - **HTML5**: Semantic structure and accessibility
@@ -128,27 +114,6 @@ Bot: [Academic calendar information]
 - **Available Courses**: Browse academic programs
 - **Financial Aid**: Learn about costs and scholarships
 - **Library Hours**: Check study space availability
-
-## 🌐 Deployment
-
-### Local Development
-- Perfect for testing and development
-- No external dependencies
-- Easy to modify and customize
-
-### Production Deployment
-- **Heroku**: Deploy with `git push heroku main`
-- **AWS**: Use Elastic Beanstalk or EC2
-- **Google Cloud**: App Engine or Compute Engine
-- **Docker**: Containerize for easy deployment
-
-### Environment Variables
-```bash
-export FLASK_ENV=production
-export FLASK_DEBUG=0
-export HOST=0.0.0.0
-export PORT=5000
-```
 
 ## 🔒 Security Features
 
