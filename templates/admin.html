@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Admin Dashboard - Cllg Chatbot</title>
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}?v=1.1">
+	<style>
+		.container { max-width: 980px; margin: 24px auto; padding: 16px; }
+		.header-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+		.header-row h1 { margin: 0; font-size: 22px; }
+		.card { background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+		.input-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+		.input-row input, .input-row textarea { width: 100%; border: 1px solid #e2e8f0; border-radius: 8px; padding: 10px; font-size: 14px; }
+		textarea { min-height: 100px; }
+		.small { color: #64748b; font-size: 12px; }
+		.btn { background:#4f46e5; color: #fff; border: none; border-radius: 8px; padding: 10px 12px; cursor: pointer; }
+		.btn.secondary { background:#0f172a; }
+		.table { width: 100%; border-collapse: collapse; }
+		.table th, .table td { border-bottom: 1px solid #e2e8f0; text-align: left; padding: 10px; font-size: 14px; }
+		.row-actions button { margin-right: 8px; }
+		.token-input { width: 280px; }
+	</style>
+</head>
+<body>
+	<div class="container">
+		<div class="header-row">
+			<h1><i class="fas fa-shield-alt"></i> Admin Dashboard</h1>
+			<div>
+				<input id="adminToken" type="password" class="token-input" placeholder="Admin Token (X-Admin-Token)">
+				<button id="refreshBtn" class="btn secondary"><i class="fas fa-rotate"></i> Refresh</button>
+				<a href="/" class="btn"><i class="fas fa-comments"></i> Chat</a>
+			</div>
+		</div>
+
+		<div class="card">
+			<h3 style="margin-top:0">Add Knowledge Entry</h3>
+			<div class="input-row" style="margin-bottom:12px; grid-template-columns: 1fr;">
+				<input id="titleInput" type="text" placeholder="Title (optional)">
+			</div>
+			<div class="input-row">
+				<input id="keywordsInput" type="text" placeholder="Keywords (comma separated)">
+				<textarea id="responsesInput" placeholder="Responses (one per line)"></textarea>
+			</div>
+			<div style="margin-top:12px; display:flex; justify-content: space-between; align-items:center;">
+				<span class="small">Entries are matched when any keyword appears in a user message.</span>
+				<button id="addBtn" class="btn"><i class="fas fa-plus"></i> Add</button>
+			</div>
+		</div>
+
+		<div class="card">
+			<h3 style="margin:0 0 12px 0">Existing Entries</h3>
+			<table class="table">
+				<thead>
+					<tr>
+						<th style="width:22%">Title</th>
+						<th>Keywords</th>
+						<th>Responses</th>
+						<th style="width:160px">Actions</th>
+					</tr>
+				</thead>
+				<tbody id="entriesTable"></tbody>
+			</table>
+		</div>
+
+		<div class="card">
+			<h3 style="margin:0 0 12px 0">Campus Locations</h3>
+			<div class="input-row" style="grid-template-columns: 1fr 1fr; margin-bottom:12px;">
+				<input id="locName" type="text" placeholder="Location name (e.g., Main Gate)">
+				<input id="locCategory" type="text" placeholder="Category (e.g., Building, Service)">
+			</div>
+			<div class="input-row" style="grid-template-columns: 1fr; margin-bottom:12px;">
+				<input id="locMapsQuery" type="text" placeholder="Google Maps search text (destination). Optional if lat/lng provided.">
+			</div>
+			<div class="input-row" style="margin-bottom:12px;">
+				<input id="locLat" type="text" placeholder="Latitude (optional)">
+				<input id="locLng" type="text" placeholder="Longitude (optional)">
+			</div>
+			<div class="input-row" style="grid-template-columns: 1fr; margin-bottom:12px;">
+				<textarea id="locDesc" placeholder="Description (optional)"></textarea>
+			</div>
+			<div style="display:flex; justify-content: space-between; align-items:center;">
+				<span class="small">Users will get walking directions from their current location to this destination.</span>
+				<button id="addLocationBtn" class="btn"><i class="fas fa-location-dot"></i> Add Location</button>
+			</div>
+			<div style="margin-top:16px;">
+				<table class="table">
+					<thead>
+						<tr>
+							<th style="width:24%">Name</th>
+							<th>Category</th>
+							<th>Destination</th>
+							<th style="width:160px">Actions</th>
+						</tr>
+					</thead>
+					<tbody id="locationsTable"></tbody>
+				</table>
+			</div>
+		</div>
+
+		<div class="card">
+			<h3 style="margin-top:0">Upload PDF as Knowledge</h3>
+			<div class="input-row" style="margin-bottom:12px; grid-template-columns: 1fr 1fr;">
+				<input id="pdfTitle" type="text" placeholder="Title (defaults to filename)">
+				<input id="pdfKeywords" type="text" placeholder="Keywords for matching (comma separated)" />
+			</div>
+			<div class="input-row" style="grid-template-columns: 1fr;">
+				<input id="pdfFile" type="file" accept="application/pdf" />
+			</div>
+			<div style="margin-top:12px; display:flex; justify-content: flex-end;">
+				<button id="uploadPdfBtn" class="btn"><i class="fas fa-file-pdf"></i> Upload PDF</button>
+			</div>
+			<p class="small" style="margin-top:8px;">The PDF text will be extracted and chunked into responses (max 10). Provide meaningful keywords so the AI can match user queries.</p>
+		</div>
+	</div>
+
+	<script src="{{ url_for('static', filename='js/admin.js') }}?v=1.0"></script>
+</body>
+</html>
+

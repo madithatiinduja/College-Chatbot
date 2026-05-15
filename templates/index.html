@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cllg Chatbot - AI Student Assistant</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}?v=1.1">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo">
+                <i class="fas fa-graduation-cap"></i>
+                <h1>Cllg Chatbot</h1>
+            </div>
+            <p class="subtitle">Your 24/7 AI Student Assistant</p>
+        </header>
+
+        <!-- Chat Container -->
+        <div class="chat-container">
+            <div class="chat-header">
+                <div class="bot-info">
+                    <div class="bot-avatar">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <div class="bot-status">
+                        <h3>College Assistant</h3>
+                        <span class="status-indicator online">
+                            <i class="fas fa-circle"></i> Online
+                        </span>
+                    </div>
+                </div>
+                <div class="header-actions">
+                    <button class="btn-secondary" id="clearChat">
+                        <i class="fas fa-trash"></i> Clear Chat
+                    </button>
+                    <a class="btn-secondary" href="/admin" title="Open Admin Dashboard" style="text-decoration:none; display:inline-flex; align-items:center; gap:6px;">
+                        <i class="fas fa-shield-alt"></i> Admin
+                    </a>
+                </div>
+            </div>
+
+            <!-- Chat Messages -->
+            <div class="chat-messages" id="chatMessages">
+                <!-- Welcome message will be added here -->
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="quick-actions" id="quickActions">
+                <button class="quick-btn" data-query="What are the admission requirements?">
+                    <i class="fas fa-question-circle"></i>
+                    Admission Requirements
+                </button>
+                <button class="quick-btn" data-query="What are the available courses?">
+                    <i class="fas fa-book"></i>
+                    Available Courses
+                </button>
+                <button class="quick-btn" data-query="How do I apply for financial aid?">
+                    <i class="fas fa-dollar-sign"></i>
+                    Financial Aid
+                </button>
+                <button class="quick-btn" data-query="What are the library hours?">
+                    <i class="fas fa-clock"></i>
+                    Library Hours
+                </button>
+            </div>
+
+            <!-- Input Area -->
+            <div class="chat-input-container">
+                <div class="input-wrapper">
+                    <input type="text" id="messageInput" placeholder="Ask me anything about college life..." autocomplete="off">
+                    <button class="send-btn" id="sendBtn">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+                <div class="input-footer">
+                    <span class="typing-indicator" id="typingIndicator" style="display: none;">
+                        <i class="fas fa-circle"></i>
+                        <i class="fas fa-circle"></i>
+                        <i class="fas fa-circle"></i>
+                    </span>
+                    <span class="input-hint">Press Enter to send</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Directions Widget -->
+        <div class="card" style="margin-top:16px;">
+            <h2 style="margin:0 0 12px 0; display:flex; align-items:center; gap:8px;">
+                <i class="fas fa-map-marker-alt"></i> Campus Directions
+            </h2>
+            <div style="display:grid; grid-template-columns: 2fr 1fr 120px; gap:10px;">
+                <select id="locationSelect" style="border:1px solid #e2e8f0; border-radius:8px; padding:10px;">
+                    <option value="">Select a destination...</option>
+                </select>
+                <select id="travelMode" style="border:1px solid #e2e8f0; border-radius:8px; padding:10px;">
+                    <option value="walking">Walking</option>
+                    <option value="driving">Driving</option>
+                    <option value="transit">Transit</option>
+                </select>
+                <button id="getDirectionsBtn" class="btn-secondary" style="height:40px; display:inline-flex; align-items:center; justify-content:center; gap:6px;">
+                    <i class="fas fa-location-arrow"></i> Get Directions
+                </button>
+            </div>
+            <p class="small" style="margin-top:8px; color:#64748b;">We’ll use your current location (with permission) and open Google Maps to route you.</p>
+        </div>
+
+        <!-- Features Section -->
+        <div class="features-section">
+            <h2>What I Can Help You With</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <i class="fas fa-calendar-alt"></i>
+                    <h3>Academic Calendar</h3>
+                    <p>Important dates, deadlines, and events</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <h3>Campus Services</h3>
+                    <p>Locations and hours of campus facilities</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-users"></i>
+                    <h3>Student Life</h3>
+                    <p>Clubs, activities, and campus events</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-tools"></i>
+                    <h3>Technical Support</h3>
+                    <p>IT help and software assistance</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}?v=1.1"></script>
+</body>
+</html> 

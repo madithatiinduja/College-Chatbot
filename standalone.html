@@ -1,0 +1,1037 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cllg Chatbot - AI Student Assistant (Standalone)</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header Styles */
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            color: white;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 10px;
+        }
+
+        .logo i {
+            font-size: 2.5rem;
+            color: #ffd700;
+        }
+
+        .logo h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            font-weight: 300;
+        }
+
+        /* Chat Container */
+        .chat-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+            margin-bottom: 40px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .chat-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .bot-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .bot-avatar {
+            width: 50px;
+            height: 50px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .bot-status h3 {
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .status-indicator.online i {
+            color: #4ade80;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .btn-secondary {
+            background: rgba(255,255,255,0.2);
+            border: 1px solid rgba(255,255,255,0.3);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+        }
+
+        /* Chat Messages */
+        .chat-messages {
+            padding: 20px;
+            max-height: 400px;
+            overflow-y: auto;
+            background: #f8fafc;
+        }
+
+        .message {
+            margin-bottom: 20px;
+            display: flex;
+            gap: 12px;
+            animation: fadeInUp 0.3s ease;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .message.user {
+            flex-direction: row-reverse;
+        }
+
+        .message-content {
+            max-width: 70%;
+            padding: 12px 16px;
+            border-radius: 18px;
+            position: relative;
+        }
+
+        .message.bot .message-content {
+            background: white;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .message.user .message-content {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .message-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+
+        .message.bot .message-avatar {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .message.user .message-avatar {
+            background: #f1f5f9;
+            color: #64748b;
+        }
+
+        .message-time {
+            font-size: 0.75rem;
+            opacity: 0.7;
+            margin-top: 5px;
+            text-align: right;
+        }
+
+        /* Quick Actions */
+        .quick-actions {
+            padding: 20px;
+            background: white;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .quick-btn {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            padding: 12px 16px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.9rem;
+            color: #475569;
+            margin: 5px;
+        }
+
+        .quick-btn:hover {
+            background: #e2e8f0;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .quick-btn i {
+            color: #667eea;
+            font-size: 1rem;
+        }
+
+        /* Input Area */
+        .chat-input-container {
+            padding: 20px;
+            background: white;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .input-wrapper {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        #messageInput {
+            flex: 1;
+            padding: 12px 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+            outline: none;
+        }
+
+        #messageInput:focus {
+            border-color: #667eea;
+        }
+
+        .send-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 16px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 50px;
+        }
+
+        .send-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+
+        .send-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .input-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.8rem;
+            color: #64748b;
+        }
+
+        .typing-indicator {
+            display: flex;
+            gap: 4px;
+            align-items: center;
+        }
+
+        .typing-indicator i {
+            width: 6px;
+            height: 6px;
+            background: #667eea;
+            border-radius: 50%;
+            animation: typing 1.4s infinite ease-in-out;
+        }
+
+        .typing-indicator i:nth-child(1) { animation-delay: -0.32s; }
+        .typing-indicator i:nth-child(2) { animation-delay: -0.16s; }
+
+        @keyframes typing {
+            0%, 80%, 100% {
+                transform: scale(0.8);
+                opacity: 0.5;
+            }
+            40% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        /* Features Section */
+        .features-section {
+            text-align: center;
+            color: white;
+            margin-top: 40px;
+        }
+
+        .features-section h2 {
+            font-size: 2rem;
+            margin-bottom: 30px;
+            font-weight: 600;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .feature-card {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 16px;
+            padding: 30px 20px;
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255,255,255,0.15);
+        }
+
+        .feature-card i {
+            font-size: 2.5rem;
+            color: #ffd700;
+            margin-bottom: 20px;
+        }
+
+        .feature-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .feature-card p {
+            opacity: 0.9;
+            line-height: 1.6;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .logo h1 {
+                font-size: 2rem;
+            }
+            
+            .chat-container {
+                border-radius: 15px;
+            }
+            
+            .chat-header {
+                padding: 15px;
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+            
+            .header-actions {
+                width: 100%;
+            }
+            
+            .btn-secondary {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .logo {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .message-content {
+                max-width: 85%;
+            }
+            
+            .features-section h2 {
+                font-size: 1.5rem;
+            }
+        }
+
+        /* Scrollbar Styling */
+        .chat-messages::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .chat-messages::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 3px;
+        }
+
+        .chat-messages::-webkit-scrollbar-thumb {
+            background: #c1c1c1;
+            border-radius: 3px;
+        }
+
+        .chat-messages::-webkit-scrollbar-thumb:hover {
+            background: #a8a8a8;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo">
+                <i class="fas fa-graduation-cap"></i>
+                <h1>Cllg Chatbot</h1>
+            </div>
+            <p class="subtitle">Your 24/7 AI Employee Assistant</p>
+        </header>
+
+        <!-- Chat Container -->
+        <div class="chat-container">
+            <div class="chat-header">
+                <div class="bot-info">
+                    <div class="bot-avatar">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <div class="bot-status">
+                        <h3>College Assistant</h3>
+                        <span class="status-indicator online">
+                            <i class="fas fa-circle"></i> Online
+                        </span>
+                    </div>
+                </div>
+                <div class="header-actions">
+                    <button class="btn-secondary" id="clearChat">
+                        <i class="fas fa-trash"></i> Clear Chat
+                    </button>
+                </div>
+            </div>
+
+            <!-- Chat Messages -->
+            <div class="chat-messages" id="chatMessages">
+                <!-- Welcome message will be added here -->
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="quick-actions" id="quickActions">
+                <button class="quick-btn" data-query="What are the admission requirements?">
+                    <i class="fas fa-question-circle"></i>
+                    Admission Requirements
+                </button>
+                <button class="quick-btn" data-query="What are the available courses?">
+                    <i class="fas fa-book"></i>
+                    Available Courses
+                </button>
+                <button class="quick-btn" data-query="How do I apply for financial aid?">
+                    <i class="fas fa-dollar-sign"></i>
+                    Financial Aid
+                </button>
+                <button class="quick-btn" data-query="What are the library hours?">
+                    <i class="fas fa-clock"></i>
+                    Library Hours
+                </button>
+            </div>
+
+            <!-- Input Area -->
+            <div class="chat-input-container">
+                <div class="input-wrapper">
+                    <input type="text" id="messageInput" placeholder="Ask me anything about college life..." autocomplete="off">
+                    <button class="send-btn" id="sendBtn">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+                <div class="input-footer">
+                    <span class="typing-indicator" id="typingIndicator" style="display: none;">
+                        <i class="fas fa-circle"></i>
+                        <i class="fas fa-circle"></i>
+                        <i class="fas fa-circle"></i>
+                    </span>
+                    <span class="input-hint">Press Enter to send</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Features Section -->
+        <div class="features-section">
+            <h2>What I Can Help You With</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <i class="fas fa-calendar-alt"></i>
+                    <h3>Academic Calendar</h3>
+                    <p>Important dates, deadlines, and events</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <h3>Campus Services</h3>
+                    <p>Locations and hours of campus facilities</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-users"></i>
+                    <h3>Student Life</h3>
+                    <p>Clubs, activities, and campus events</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-tools"></i>
+                    <h3>Technical Support</h3>
+                    <p>IT help and software assistance</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Cllg Chatbot - Frontend JavaScript (Standalone Version)
+        class CllgChatbot {
+            constructor() {
+                this.chatMessages = document.getElementById('chatMessages');
+                this.messageInput = document.getElementById('messageInput');
+                this.sendBtn = document.getElementById('sendBtn');
+                this.clearChatBtn = document.getElementById('clearChat');
+                this.typingIndicator = document.getElementById('typingIndicator');
+                this.quickActions = document.getElementById('quickActions');
+                
+                this.chatHistory = [];
+                this.isTyping = false;
+                
+                this.init();
+            }
+            
+                init() {
+        this.setupEventListeners();
+        this.loadChatHistory();
+        // Only display welcome message if no chat history exists
+        if (this.chatHistory.length === 0) {
+            this.displayWelcomeMessage();
+        }
+    }
+            
+            setupEventListeners() {
+                // Send message on button click
+                this.sendBtn.addEventListener('click', () => this.sendMessage());
+                
+                // Send message on Enter key
+                this.messageInput.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter' && !e.shiftKey) {
+                        e.preventDefault();
+                        this.sendMessage();
+                    }
+                });
+                
+                // Clear chat
+                this.clearChatBtn.addEventListener('click', () => this.clearChat());
+                
+                // Quick action buttons
+                this.quickActions.addEventListener('click', (e) => {
+                    if (e.target.classList.contains('quick-btn')) {
+                        const query = e.target.getAttribute('data-query');
+                        this.messageInput.value = query;
+                        this.sendMessage();
+                    }
+                });
+                
+                // Input focus for better UX
+                this.messageInput.addEventListener('focus', () => {
+                    this.messageInput.parentElement.style.borderColor = '#667eea';
+                });
+                
+                this.messageInput.addEventListener('blur', () => {
+                    this.messageInput.parentElement.style.borderColor = '#e2e8f0';
+                });
+            }
+            
+            displayWelcomeMessage() {
+                const welcomeMessage = {
+                    type: 'bot',
+                    content: `Hello! I'm your AI college assistant. I'm here to help you 24/7 with any questions about college life, academics, campus services, and more. How can I assist you today?`,
+                    timestamp: new Date()
+                };
+                
+                this.addMessageToChat(welcomeMessage);
+            }
+            
+            async sendMessage() {
+                const message = this.messageInput.value.trim();
+                if (!message || this.isTyping) return;
+                
+                // Add user message to chat
+                const userMessage = {
+                    type: 'user',
+                    content: message,
+                    timestamp: new Date()
+                };
+                
+                this.addMessageToChat(userMessage);
+                this.messageInput.value = '';
+                
+                // Show typing indicator
+                this.showTypingIndicator();
+                
+                // Simulate typing delay
+                setTimeout(() => {
+                    this.hideTypingIndicator();
+                    
+                    // Get AI response
+                    const response = this.getLocalAIResponse(message);
+                    
+                    // Add bot response to chat
+                    const botMessage = {
+                        type: 'bot',
+                        content: response.reply,
+                        timestamp: new Date()
+                    };
+                    
+                    this.addMessageToChat(botMessage);
+                }, 1000);
+            }
+            
+            getLocalAIResponse(message) {
+                const lowerMessage = message.toLowerCase();
+                
+                // Admission requirements
+                if (lowerMessage.includes('admission') || lowerMessage.includes('requirements') || lowerMessage.includes('apply')) {
+                    return {
+                        reply: `Here are the general admission requirements for our college:
+
+• High school diploma or equivalent (GED)
+• Completed application form with $50 application fee
+• Official high school transcripts
+• SAT or ACT scores (recommended)
+• Personal statement or essay
+• Letters of recommendation (2 required)
+• Application deadline: March 1st for Fall semester
+
+For specific programs, additional requirements may apply. Would you like me to provide details about a particular major or program?`
+                    };
+                }
+                
+                // Available courses
+                if (lowerMessage.includes('course') || lowerMessage.includes('class') || lowerMessage.includes('major')) {
+                    return {
+                        reply: `We offer a wide range of courses across various disciplines:
+
+**Arts & Humanities:**
+• English Literature, Creative Writing, History, Philosophy, Art History
+
+**Business & Economics:**
+• Business Administration, Marketing, Finance, Economics, Entrepreneurship
+
+**Science & Technology:**
+• Computer Science, Biology, Chemistry, Physics, Mathematics, Engineering
+
+**Social Sciences:**
+• Psychology, Sociology, Political Science, Anthropology, Education
+
+**Health Sciences:**
+• Nursing, Public Health, Nutrition, Exercise Science
+
+Each major has specific course requirements and electives. What field interests you most?`
+                    };
+                }
+                
+                // Financial aid
+                if (lowerMessage.includes('financial') || lowerMessage.includes('aid') || lowerMessage.includes('scholarship') || lowerMessage.includes('cost')) {
+                    return {
+                        reply: `We're committed to making education affordable! Here's information about financial aid:
+
+**Tuition & Fees:**
+• Full-time tuition: $12,500 per semester
+• Room & board: $8,000 per semester
+• Books & supplies: ~$1,200 per semester
+
+**Financial Aid Options:**
+• Federal Pell Grants (up to $6,895/year)
+• Federal Direct Loans
+• Work-study programs
+• Institutional scholarships
+• State grants
+
+**Application Process:**
+1. Complete FAFSA (Free Application for Federal Student Aid)
+2. Submit by March 1st priority deadline
+3. Review your financial aid package
+4. Accept/decline offers
+
+Our financial aid office can help you explore all options. Would you like me to connect you with them?`
+                    };
+                }
+                
+                // Library hours
+                if (lowerMessage.includes('library') || lowerMessage.includes('hours') || lowerMessage.includes('study')) {
+                    return {
+                        reply: `Our library is a great place to study! Here are the current hours:
+
+**Main Library Hours:**
+• Monday-Thursday: 7:00 AM - 11:00 PM
+• Friday: 7:00 AM - 8:00 PM
+• Saturday: 9:00 AM - 6:00 PM
+• Sunday: 12:00 PM - 11:00 PM
+
+**Special Collections:**
+• Rare Books Room: By appointment only
+• Media Center: Same as main library
+• Study Rooms: Available for 2-hour reservations
+
+**Extended Hours During Finals:**
+• Open 24/7 during final exam week
+• Coffee cart available in evenings
+
+The library also offers online resources accessible 24/7 from anywhere!`
+                    };
+                }
+                
+                // Campus services
+                if (lowerMessage.includes('campus') || lowerMessage.includes('service') || lowerMessage.includes('facility')) {
+                    return {
+                        reply: `We have many campus services to support your success:
+
+**Academic Support:**
+• Writing Center (Mon-Fri, 9 AM-5 PM)
+• Math Lab (Mon-Thu, 10 AM-8 PM)
+• Tutoring Services (by appointment)
+• Academic Advising
+
+**Health & Wellness:**
+• Student Health Center (Mon-Fri, 8 AM-5 PM)
+• Counseling Services (confidential, free)
+• Fitness Center (6 AM-11 PM daily)
+• Recreation Center
+
+**Student Life:**
+• Student Union (7 AM-12 AM daily)
+• Career Services (Mon-Fri, 9 AM-5 PM)
+• International Student Office
+• Disability Services
+
+**Technology:**
+• IT Help Desk (24/7 support)
+• Computer Labs (various locations)
+• WiFi throughout campus
+
+What specific service are you looking for?`
+                    };
+                }
+                
+                // Student life
+                if (lowerMessage.includes('student life') || lowerMessage.includes('club') || lowerMessage.includes('activity') || lowerMessage.includes('event')) {
+                    return {
+                        reply: `Campus life is vibrant and engaging! Here's what's happening:
+
+**Student Organizations (100+ clubs):**
+• Academic clubs (Math Club, Science Society)
+• Cultural organizations (International Student Association)
+• Service groups (Community Service Club)
+• Special interest (Photography Club, Gaming Club)
+
+**Campus Events:**
+• Welcome Week (August)
+• Homecoming (October)
+• Spring Festival (April)
+• Cultural celebrations throughout the year
+
+**Recreation:**
+• Intramural sports
+• Outdoor adventure trips
+• Fitness classes
+• Movie nights
+
+**Leadership Opportunities:**
+• Student Government
+• Resident Assistant positions
+• Peer mentoring programs
+
+Getting involved is a great way to make friends and build your resume!`
+                    };
+                }
+                
+                // Technical support
+                if (lowerMessage.includes('technical') || lowerMessage.includes('computer') || lowerMessage.includes('software') || lowerMessage.includes('wifi')) {
+                    return {
+                        reply: `Need tech help? We've got you covered:
+
+**IT Support Services:**
+• 24/7 Help Desk: (555) 123-4567
+• Email: helpdesk@college.edu
+• Live chat available on our website
+
+**Common Issues & Solutions:**
+• WiFi: Connect to "College_Network" with your student ID
+• Email: Use your college email (username@college.edu)
+• Software: Free access to Microsoft Office, Adobe Creative Suite
+• Printing: 100 free pages per semester
+
+**Computer Labs:**
+• Main Library: 50+ computers
+• Science Building: Specialized software
+• Business School: Financial modeling tools
+
+**Device Support:**
+• Laptop/desktop troubleshooting
+• Mobile device setup
+• Software installation help
+
+What specific tech issue are you experiencing?`
+                    };
+                }
+                
+                // Academic calendar
+                if (lowerMessage.includes('calendar') || lowerMessage.includes('deadline') || lowerMessage.includes('exam') || lowerMessage.includes('break')) {
+                    return {
+                        reply: `Here are the key dates for this academic year:
+
+**Fall Semester 2024:**
+• Classes begin: August 26
+• Labor Day (no classes): September 2
+• Fall Break: October 14-15
+• Thanksgiving Break: November 27-29
+• Finals Week: December 16-20
+• Semester ends: December 20
+
+**Spring Semester 2025:**
+• Classes begin: January 13
+• Martin Luther King Day (no classes): January 20
+• Spring Break: March 10-14
+• Easter Break: April 18-20
+• Finals Week: May 5-9
+• Commencement: May 10
+
+**Important Deadlines:**
+• Add/Drop period: First 2 weeks of classes
+• Withdrawal deadline: 75% of semester completed
+• Graduation application: March 1st
+
+Need specific dates for your program?`
+                    };
+                }
+                
+                // Default response
+                return {
+                    reply: `Thank you for your question! I'm here to help with college-related inquiries. 
+
+I can assist with:
+• Admission requirements and applications
+• Course information and academic programs
+• Financial aid and scholarships
+• Campus services and facilities
+• Student life and activities
+• Technical support
+• Academic calendar and deadlines
+
+Could you please rephrase your question or ask about something specific? I want to make sure I provide you with the most helpful information.`
+                };
+            }
+            
+            addMessageToChat(message) {
+                this.chatHistory.push(message);
+                this.saveChatHistory();
+                
+                const messageElement = this.createMessageElement(message);
+                this.chatMessages.appendChild(messageElement);
+                
+                // Scroll to bottom
+                this.scrollToBottom();
+                
+                // Update quick actions visibility
+                this.updateQuickActions();
+            }
+            
+            createMessageElement(message) {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = `message ${message.type}`;
+                
+                const avatar = document.createElement('div');
+                avatar.className = 'message-avatar';
+                
+                if (message.type === 'bot') {
+                    avatar.innerHTML = '<i class="fas fa-robot"></i>';
+                } else {
+                    avatar.innerHTML = '<i class="fas fa-user"></i>';
+                }
+                
+                const content = document.createElement('div');
+                content.className = 'message-content';
+                content.innerHTML = message.content;
+                
+                const time = document.createElement('div');
+                time.className = 'message-time';
+                time.textContent = this.formatTime(message.timestamp);
+                
+                content.appendChild(time);
+                
+                messageDiv.appendChild(avatar);
+                messageDiv.appendChild(content);
+                
+                return messageDiv;
+            }
+            
+            formatTime(timestamp) {
+                const now = new Date();
+                const messageTime = new Date(timestamp);
+                
+                if (now.toDateString() === messageTime.toDateString()) {
+                    return messageTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                } else {
+                    return messageTime.toLocaleDateString() + ' ' + messageTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                }
+            }
+            
+            showTypingIndicator() {
+                this.isTyping = true;
+                this.typingIndicator.style.display = 'flex';
+                this.sendBtn.disabled = true;
+                this.scrollToBottom();
+            }
+            
+            hideTypingIndicator() {
+                this.isTyping = false;
+                this.typingIndicator.style.display = 'none';
+                this.sendBtn.disabled = false;
+            }
+            
+            scrollToBottom() {
+                this.chatMessages.scrollTop = this.chatMessages.scrollHeight;
+            }
+            
+            updateQuickActions() {
+                // Hide quick actions after first message
+                if (this.chatHistory.length > 1) {
+                    this.quickActions.style.display = 'none';
+                }
+            }
+            
+            clearChat() {
+                if (confirm('Are you sure you want to clear the chat history?')) {
+                    this.chatHistory = [];
+                    this.chatMessages.innerHTML = '';
+                    this.quickActions.style.display = 'block';
+                    this.saveChatHistory();
+                    this.displayWelcomeMessage();
+                }
+            }
+            
+            saveChatHistory() {
+                try {
+                    localStorage.setItem('cllgChatbotHistory', JSON.stringify(this.chatHistory));
+                } catch (error) {
+                    console.error('Error saving chat history:', error);
+                }
+            }
+            
+                loadChatHistory() {
+        try {
+            const saved = localStorage.getItem('cllgChatbotHistory');
+            if (saved) {
+                this.chatHistory = JSON.parse(saved);
+                // Display existing messages without adding them to history again
+                this.chatHistory.forEach(message => {
+                    this.displayMessageOnly(message);
+                });
+            }
+        } catch (error) {
+            console.error('Error loading chat history:', error);
+        }
+    }
+    
+    displayMessageOnly(message) {
+        // Display message without adding to chat history
+        const messageElement = this.createMessageElement(message);
+        this.chatMessages.appendChild(messageElement);
+        
+        // Scroll to bottom
+        this.scrollToBottom();
+        
+        // Update quick actions visibility
+        this.updateQuickActions();
+    }
+        }
+
+        // Initialize chatbot when DOM is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            new CllgChatbot();
+        });
+    </script>
+</body>
+</html> 

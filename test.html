@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Cllg Chatbot Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .chat-container { max-width: 600px; margin: 0 auto; }
+        .message { margin: 10px 0; padding: 10px; border-radius: 5px; }
+        .user { background: #e3f2fd; text-align: right; }
+        .bot { background: #f5f5f5; }
+        input, button { padding: 10px; margin: 5px; }
+        input { width: 70%; }
+    </style>
+</head>
+<body>
+    <div class="chat-container">
+        <h1>Cllg Chatbot Test</h1>
+        <div id="chatMessages"></div>
+        <input type="text" id="messageInput" placeholder="Ask a question...">
+        <button onclick="sendMessage()">Send</button>
+    </div>
+
+    <script>
+        function sendMessage() {
+            const input = document.getElementById('messageInput');
+            const message = input.value.trim();
+            if (!message) return;
+            
+            // Add user message
+            addMessage('user', message);
+            input.value = '';
+            
+            // Get bot response
+            const response = getBotResponse(message);
+            setTimeout(() => addMessage('bot', response), 500);
+        }
+        
+        function addMessage(type, content) {
+            const div = document.createElement('div');
+            div.className = `message ${type}`;
+            div.textContent = content;
+            document.getElementById('chatMessages').appendChild(div);
+        }
+        
+        function getBotResponse(message) {
+            const lower = message.toLowerCase();
+            
+            if (lower.includes('admission') || lower.includes('apply')) {
+                return "To apply, you need: High school diploma, application form, transcripts, and $50 fee. Deadline: March 1st.";
+            }
+            if (lower.includes('course') || lower.includes('major')) {
+                return "We offer programs in Arts, Business, Science, and Health. What interests you?";
+            }
+            if (lower.includes('cost') || lower.includes('financial')) {
+                return "Tuition is $12,500 per semester. We offer scholarships, grants, and loans.";
+            }
+            if (lower.includes('library')) {
+                return "Library hours: Mon-Thu 7AM-11PM, Fri 7AM-8PM, Sat 9AM-6PM, Sun 12PM-11PM.";
+            }
+            
+            return "I can help with admissions, courses, costs, library hours, and more. What would you like to know?";
+        }
+        
+        // Enter key support
+        document.getElementById('messageInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') sendMessage();
+        });
+        
+        // Welcome message
+        addMessage('bot', 'Hello! I\'m your AI college assistant. How can I help you today?');
+    </script>
+</body>
+</html> 

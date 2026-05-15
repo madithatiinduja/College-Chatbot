@@ -1,0 +1,144 @@
+{
+  "locations": [
+    {
+      "id": "seed-vu-main-gate",
+      "name": "Vignan University Main Gate",
+      "category": "Entrance",
+      "description": "Primary entrance gate to Vignan's Foundation for Science, Technology & Research, Guntur.",
+      "maps_query": "Vignan's Foundation for Science, Technology & Research Main Gate, Guntur",
+      "latitude": 16.3069,
+      "longitude": 80.5087,
+      "created_at": "2024-09-01T00:00:00Z"
+    },
+    {
+      "id": "seed-vu-admin-block",
+      "name": "Administrative Block",
+      "category": "Building",
+      "description": "University administrative offices and student services.",
+      "maps_query": "Vignan University Administrative Block, Guntur",
+      "latitude": null,
+      "longitude": null,
+      "created_at": "2024-09-01T00:00:00Z"
+    },
+    {
+      "id": "seed-vu-library",
+      "name": "Central Library",
+      "category": "Library",
+      "description": "Central Library at Vignan University, study spaces and resources.",
+      "maps_query": "Vignan University Central Library, Guntur",
+      "latitude": null,
+      "longitude": null,
+      "created_at": "2024-09-01T00:00:00Z"
+    },
+    {
+      "id": "seed-vu-auditorium",
+      "name": "Vignan Auditorium",
+      "category": "Auditorium",
+      "description": "Main auditorium for events and convocations.",
+      "maps_query": "Vignan University Auditorium, Guntur",
+      "latitude": null,
+      "longitude": null,
+      "created_at": "2024-09-01T00:00:00Z"
+    },
+    {
+      "id": "seed-vu-hostel-boys",
+      "name": "Boys Hostel",
+      "category": "Hostel",
+      "description": "Residential facility for male students.",
+      "maps_query": "Vignan University Boys Hostel, Guntur",
+      "latitude": null,
+      "longitude": null,
+      "created_at": "2024-09-01T00:00:00Z"
+    },
+    {
+      "id": "seed-vu-hostel-girls",
+      "name": "Girls Hostel",
+      "category": "Hostel",
+      "description": "Residential facility for female students.",
+      "maps_query": "Vignan University Girls Hostel, Guntur",
+      "latitude": null,
+      "longitude": null,
+      "created_at": "2024-09-01T00:00:00Z"
+    },
+    {
+      "id": "seed-vu-cse-block",
+      "name": "CSE Block",
+      "category": "Academic",
+      "description": "Department of Computer Science and Engineering.",
+      "maps_query": "Vignan University CSE Block, Guntur",
+      "latitude": null,
+      "longitude": null,
+      "created_at": "2024-09-01T00:00:00Z"
+    },
+    {
+      "id": "seed-vu-ece-block",
+      "name": "ECE Block",
+      "category": "Academic",
+      "description": "Department of Electronics and Communication Engineering.",
+      "maps_query": "Vignan University ECE Block, Guntur",
+      "latitude": null,
+      "longitude": null,
+      "created_at": "2024-09-01T00:00:00Z"
+    },
+    {
+      "id": "seed-vu-mech-block",
+      "name": "Mechanical Engineering Block",
+      "category": "Academic",
+      "description": "Department of Mechanical Engineering.",
+      "maps_query": "Vignan University Mechanical Engineering Block, Guntur",
+      "latitude": null,
+      "longitude": null,
+      "created_at": "2024-09-01T00:00:00Z"
+    },
+    {
+      "id": "seed-vu-cafeteria",
+      "name": "Central Cafeteria",
+      "category": "Dining",
+      "description": "Food court and cafeteria for students and staff.",
+      "maps_query": "Vignan University Cafeteria, Guntur",
+      "latitude": null,
+      "longitude": null,
+      "created_at": "2024-09-01T00:00:00Z"
+    },
+    {
+      "id": "seed-vu-sports-complex",
+      "name": "Sports Complex & Stadium",
+      "category": "Recreation",
+      "description": "Cricket ground, indoor stadium, and sports facilities.",
+      "maps_query": "Vignan University Sports Complex, Guntur",
+      "latitude": null,
+      "longitude": null,
+      "created_at": "2024-09-01T00:00:00Z"
+    },
+    {
+      "id": "seed-vu-health-center",
+      "name": "Health Center",
+      "category": "Service",
+      "description": "Medical center for basic health services.",
+      "maps_query": "Vignan University Health Center, Guntur",
+      "latitude": null,
+      "longitude": null,
+      "created_at": "2024-09-01T00:00:00Z"
+    },
+    {
+      "id": "seed-vu-transport-office",
+      "name": "Transport Office & Bus Bay",
+      "category": "Service",
+      "description": "Transport office and main bus boarding point.",
+      "maps_query": "Vignan University Transport Office Bus Bay, Guntur",
+      "latitude": null,
+      "longitude": null,
+      "created_at": "2024-09-01T00:00:00Z"
+    },
+    {
+      "id": "seed-vu-parking-north",
+      "name": "North Parking Lot",
+      "category": "Parking",
+      "description": "General parking area on the north side of campus.",
+      "maps_query": "Vignan University Parking, North Lot, Guntur",
+      "latitude": null,
+      "longitude": null,
+      "created_at": "2024-09-01T00:00:00Z"
+    }
+  ]
+}
