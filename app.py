@@ -1094,14 +1094,15 @@ def delete_location(loc_id: str):
         return jsonify({'error': 'Failed to delete location'}), 500
 
 if __name__ == '__main__':
-    print("🚀 Starting Cllg Chatbot Server...")
-    print("📚 AI-Powered College Student Assistant")
-    print("🌐 Server will be available at: http://localhost:5000")
-    print("🔧 API endpoints:")
+    print("Starting Cllg Chatbot Server...")
+    print("AI-Powered College Student Assistant")
+    print("Server will be available at: http://localhost:5000")
+    print("API endpoints:")
     print("   - POST /api/chat - Send messages")
     print("   - GET  /api/health - Health check")
     print("   - GET  /api/stats - Usage statistics")
     print("   - POST /api/clear-history - Clear chat history")
     print("\n" + "="*50)
     
-    app.run(debug=True, host='0.0.0.0', port=5000) 
+    port = int(os.environ.get('PORT', 5000))
+    app.run(debug=False, host='0.0.0.0', port=port) 
